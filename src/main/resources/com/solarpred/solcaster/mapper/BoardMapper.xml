@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solarpred.solcaster.mapper.BoardMapper">
+
+    <!--  게시판 전체글 불러오기  -->
+    <select id="boardList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+            select * from s_qna order by qna_date desc limit #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+
+    <!--  게시판 전체글 갯수 불러오기  -->
+    <select id="boardListCnt" resultType="int">
+        select count(*) from s_qna
+    </select>
+
+    <!--  글 작성 기능  -->
+    <insert id="boardWriteForm" parameterType="com.solarpred.solcaster.domain.Board">
+        insert into s_qna values(null, #{qna_cat}, #{qna_title}, #{qna_content}, now(), #{mem_id}, 0)
+    </insert>
+
+    <!--  특정 게시물 조회  -->
+    <select id="boardView" resultType="com.solarpred.solcaster.domain.Board" parameterType="int">
+        select * from s_qna where qna_seq = #{seq}
+    </select>
+
+    <!--  게시물 수정  -->
+    <update id="boardUpdate" parameterType="com.solarpred.solcaster.domain.Board">
+        update s_qna set qna_cat = #{qna_cat}, qna_title = #{qna_title}, qna_content = #{qna_content} where qna_seq = #{qna_seq}
+    </update>
+
+    <!--  특정 게시물 삭제  -->
+    <delete id="boardDelete" parameterType="int">
+        delete from s_qna where qna_seq = #{seq}
+    </delete>
+
+    <!--  특정 게시물 댓글 모두 삭제  -->
+    <delete id="boardDeleteReply" parameterType="int">
+        delete from s_reply where qna_seq = #{seq}
+    </delete>
+
+    <!--  선택된 카테고리 게시글 보기  -->
+    <select id="category" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+            select * from s_qna where qna_cat = #{qna_cat} order by qna_date desc limit #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+
+    <!--  카테고리 글 갯수 불러오기  -->
+    <select id="boardListCategoryCnt" resultType="int" parameterType="String">
+        select count(*) from s_qna where qna_cat = #{qna_cat}
+    </select>
+
+    <!--  검색된 게시물 글 갯수 불러오기  -->
+    <select id="boardListSearchCnt" resultType="int" parameterType="String">
+        select count(*) from s_qna where qna_title like concat('%',#{qna_title},'%')
+    </select>
+
+    <!--  검색된 게시글 보기  -->
+    <select id="boardListSearch" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        select * from s_qna where qna_title like concat('%',#{qna_title},'%') order by qna_date desc limit #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+
+    <!--  조회수 증가  -->
+    <update id="boardCntAdd" parameterType="int">
+        update s_qna set qna_cnt = qna_cnt + 1  where qna_seq = #{qna_seq}
+    </update>
+
+    <!-- 특정 회원이 쓴 글 조회 -->
+    <select id="boardMemList" resultType="List" parameterType="String">
+        select qna_seq from s_qna where mem_id = #{mem_id}
+    </select>
+
+</mapper>

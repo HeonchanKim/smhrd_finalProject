@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solarpred.solcaster.mapper.MemberMapper">
+
+    <!--  회원 전체 조회  -->
+    <select id="findAll" resultType="com.solarpred.solcaster.domain.Member">
+        select * from s_member
+    </select>
+
+    <!--  페이징 처리를 위한 전체 회원 불러오기  -->
+    <select id="memberList" resultType="hashmap" parameterType="hashmap">
+        <![CDATA[
+        select * from s_member order by mem_joindate desc limit #{pageStart}, #{perPageNum}
+        ]]>
+    </select>
+
+    <!--  전체 회원 수 불러오기  -->
+    <select id="memberListCnt" resultType="int">
+        select count(*) from s_member
+    </select>
+
+    <!--  회원가입  -->
+    <insert id="joinInsert" parameterType="com.solarpred.solcaster.domain.Member">
+        insert into s_member values(#{mem_id}, #{mem_pw}, #{mem_name}, #{mem_zipcode}, #{mem_addr}, #{mem_addrdetail}, #{mem_phone},'N','N',now())
+    </insert>
+
+    <!--  로그인  -->
+    <select id="login" parameterType="com.solarpred.solcaster.domain.Member" resultType="com.solarpred.solcaster.domain.Member">
+        select * from s_member where mem_id = #{mem_id} and mem_pw = #{mem_pw}
+    </select>
+
+    <!-- 회원삭제 -->
+    <delete id="memDelete" parameterType="String">
+        delete from s_member where mem_id = #{mem_id}
+    </delete>
+
+    <!-- 회원 구매정보 업데이트 -->
+    <update id="purchaseUpdate" parameterType="com.solarpred.solcaster.domain.Member">
+        update s_member set mem_purchase = #{mem_purchase}  where mem_id = #{mem_id}
+    </update>
+
+    <!-- 회원 정보 수정 전 비밀번호 확인 -->
+    <select id="checkPW" parameterType="String" resultType="String">
+        select mem_pw from s_member where mem_id = #{mem_id}
+    </select>
+
+    <update id="goUpdateInfo" parameterType="com.solarpred.solcaster.domain.Member">
+        update s_member set mem_pw=#{mem_pw}, mem_phone=#{mem_phone}, mem_addr=#{mem_addr}, mem_addrdetail=#{mem_addrdetail}, mem_zipcode=#{mem_zipcode} where mem_id = #{mem_id}
+    </update>
+
+</mapper>
