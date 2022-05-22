@@ -8,8 +8,8 @@ let sol_realTimeTotalAOD = document.getElementById("integratedAOD2");
 
 // 10초마다 발전량 api 요청 후 y값 대입
 setInterval(function (){
-  fetch('http://13.125.104.63:8080/solarpred/api/currentGetAOD')
-  // fetch('http://192.168.0.8:9090/solarpred/api/currentGetAOD')
+  fetch('http://13.125.104.63:8080/api/currentGetAOD')
+  // fetch('http://192.168.0.8:9090/api/currentGetAOD')
       .then(res => res.json())
       .then(res => {
         y = res['r_aod'][0]['r_aod'];
@@ -19,8 +19,8 @@ setInterval(function (){
 
 let aod = [];
 let aod2 = [];
-fetch('http://13.125.104.63:8080/solarpred/api/getAOD')
-// fetch('http://192.168.0.8:9090/solarpred/api/getAOD')
+fetch('http://13.125.104.63:8080/api/getAOD')
+// fetch('http://192.168.0.8:9090/api/getAOD')
     .then(res => res.json())
     .then(res => {
       for (let x = 0; x <= 19; x += 1) {
@@ -156,9 +156,7 @@ fetch('http://13.125.104.63:8080/solarpred/api/getAOD')
 
                 // Today dashboard 페이지 실시간 누적발전량 10초 단위로 바꿈!
                 realTimeTotalAOD.innerText = y2.toFixed(2);
-                
-                // solution 페이지 실시간 누적발전량 10초 단위로 바꿈!
-                sol_realTimeTotalAOD.innerText = y2.toFixed(2);
+
                 series.addPoint([x, y2], true, true);
               }, 10000);
             },
