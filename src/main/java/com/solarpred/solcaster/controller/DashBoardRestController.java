@@ -238,8 +238,9 @@ public class DashBoardRestController {
     @RequestMapping(value = "/api/pre", method = RequestMethod.GET)
     public JSONObject apiPre(){
 
-    	// 현재시간 SQL문에 알맞는 형식으로 불러오기
+        // 현재시간 SQL문에 알맞는 형식으로 불러오기
         String parsingTime = preTotal();
+        String parsingTime2 = currentTimeAddOneHour();
         //DashBoard dash = service.DashBoardSelect();
 
         // json-simple 라이브러리 추가 필요(JSON 객체 생성)
@@ -247,20 +248,20 @@ public class DashBoardRestController {
         JSONObject row2 = new JSONObject();
         // {변수명:값, 변수명:값}
         // {sendData:[{변수명:값},{변수명:값},...]}
-        List<Prediction> items = service.PredictionSelect();
+        List<Prediction> items = service.PredictionSelect(parsingTime2);
         Double total = service.PreTotalSelect(parsingTime);
         JSONArray jArray = new JSONArray(); // json배열
 
         row2.put("total", total);
         for(int i=0; i<items.size(); i++){
-        Prediction dto = items.get(i);
-        JSONObject row = new JSONObject();
-        // json객체.put("변수명",값)
-        row.put("predAOD", dto.getPred_aod());
-        // 배열에 추가
-        // json배열.add(인덱스,json객체)
-        jArray.add(i,row);
-        //jArray.add(0,row);
+            Prediction dto = items.get(i);
+            JSONObject row = new JSONObject();
+            // json객체.put("변수명",값)
+            row.put("predAOD", dto.getPred_aod());
+            // 배열에 추가
+            // json배열.add(인덱스,json객체)
+            jArray.add(i,row);
+            //jArray.add(0,row);
         }
         jArray.add(items.size(),row2);
         // json객체에 배열을 넣음

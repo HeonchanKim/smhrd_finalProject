@@ -36,8 +36,8 @@ public interface DashBoardMapper {
     public Prediction preGetAOD(String parsingTime);
 
     public List<DashBoard> DashBoardSelect(String parsingTime);
-    
-    public List<Prediction> PredictionSelect();
+
+    public List<Prediction> PredictionSelect(String parsingTime2);
     
     public Double PreTotalSelect(String parsingTime);
     
